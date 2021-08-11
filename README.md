@@ -1,5 +1,5 @@
 # XYtable
-Software for electronically controlled XY table with G1 interpreter and graphical menu for Arduino Mega with TFT screen.
+Software for electronically controlled XY table with G1 move support and graphical menu for Arduino Mega with TFT screen.
 It works based on https://github.com/prenticedavid/MCUFRIEND_kbv and on Arduino enviroment.
 
 Video tutorial:
