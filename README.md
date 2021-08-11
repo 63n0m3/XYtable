@@ -2,6 +2,9 @@
 Software for electronically controlled XY table with G1 interpreter and graphical menu for Arduino Mega with TFT screen.
 It works based on https://github.com/prenticedavid/MCUFRIEND_kbv and on Arduino enviroment.
 
+Video tutorial:
+https://youtu.be/hIaf1pSfH0I
+
 Features:
 -Graphical Menu with seperate adjustable stepper motor scalling(pulses per sentimeter).
 -Jog with graphical menu options for speed selection and axis selection(XY, X, Y, none). Jog sets up automatically neutral position at startup. Jog can be 2 axis. It switches off during execution of G1 Moves.
