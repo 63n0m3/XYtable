@@ -1,3 +1,6 @@
+//This software was coded together with in deepth software explanation via a video tutorial:
+//  https://youtu.be/hIaf1pSfH0I
+
 #include <EEPROM.h>
 #include <Adafruit_GFX.h>
 #include <MCUFRIEND_kbv.h>
