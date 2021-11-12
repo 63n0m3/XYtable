@@ -1,7 +1,7 @@
 //This software was coded together with in deepth software explanation via a video tutorial:
 //  https://youtu.be/hIaf1pSfH0I
 //by GenOme, https://github.com/63n0m3/XYtable/
-//btc: bc1q5u49442fc08kugxp70xcer322njh3l5hplzw2k
+//btc: 1H8XwyQogdTFekH9w5CPonKFq9upmiqZ1P
 
 #include <EEPROM.h>
 #include <Adafruit_GFX.h>
