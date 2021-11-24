@@ -25,6 +25,6 @@ Jog control is not available while performing a G1 move.
 Jog neutral position is being set during start-up.
 Stepper_Driver can also set constant stepper speed movement using Set_Speed(). Just keep in mind that in main function jog position is used to call Set_Speed() function just when there is no G1 move performed, so if you want to use Set_Speed() manuall, you should disable this. if (Jog_Setup == ... Y_Axis.Set_Speed(Speed...
 
-Licence:  Free to use and distribute, under condition that this note in unchanged form is provided, and all changes to the original Gen0m3 source code are annotated.
+Licence: MIT free use, distribute and profit with this copyright notice
 By GenOme, https://github.com/63n0m3/XYtable/
 Btc: 1H8XwyQogdTFekH9w5CPonKFq9upmiqZ1P
