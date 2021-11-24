@@ -6,7 +6,7 @@ Video tutorial:
 https://youtu.be/hIaf1pSfH0I
 
 Features:
--Graphical Menu with seperate adjustable stepper motor scalling(pulses per centimeter).
+-Graphical Menu with seperate adjustable stepper motor scalling(pulses per sentimeter).
 -Jog with graphical menu options for speed selection and axis selection(XY, X, Y, none). Jog sets up automatically neutral position at startup. Jog can be 2 axis. It switches off during execution of G1 Moves.
 -Position with display accuracy of 1 micro(meter). Depending what units you consider as the base unit.
 
