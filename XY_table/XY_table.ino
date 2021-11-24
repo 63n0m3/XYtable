@@ -2,6 +2,17 @@
 // https://youtu.be/hlaf1pSfH0I Building a CNC controlled XY table. With deep software dive + source code. Arduino Mega TFT screen
 //by GenOme, https://github.com/63n0m3/XYtable/
 //btc: 1H8XwyQogdTFekH9w5CPonKFq9upmiqZ1P
+/**
+* Overall structure looks this way that there is a Stepper_Driver class maintaining each separate stepper motor. It knows its position, pin connections to stepper driver etc.
+* Class G1_Move looks up into multiple Stepper_Driver classes and performs moves ensuring Stepper_Driver's are ready.
+* There is also a Moves_Buffer[] that holds future movements to which you can add new move using Add_Position_To_Buffer() function
+* Moves_Buffer works as a cirkular buffer if it is full Add_Position_To_Buffer() will return false and wont add any more moves to the buffer( including the one just tried to add )
+* Moves are executed automatically in main until they are all finished.
+* GUI controlls all the setup options including movement scalling and jog control.
+* Jog control is not available while performing a G1 move.
+* Jog neutral position is being set during start-up.
+* Stepper_Driver can also set constant stepper speed movement using Set_Speed(). Just keep in mind that in main function jog position is used to call Set_Speed() function just when there is no G1 move performed, so if you want to use Set_Speed() manuall, you should disable this. if (Jog_Setup == ... Y_Axis.Set_Speed(Speed...
+*/
 
 #include <EEPROM.h>
 #include <Adafruit_GFX.h>
@@ -85,19 +96,19 @@ bool Touch_getXY(void)
 #define YELLOW  0xFFE0
 #define WHITE   0xFFFF
 
-
-int32_t Pulses_per_centimeter_X;
-int32_t Pulses_per_centimeter_Y;
+/// Pin defines
 #define STEPPER_X_DIRECTION 19
 #define STEPPER_X_PULSE 18
 #define STEPPER_Y_DIRECTION 21
 #define STEPPER_Y_PULSE 20
 #define JOG_X_ANALOG_PIN A14
 #define JOG_Y_ANALOG_PIN A15
+/// Scalling in axis, accesible through GUI
+int32_t Pulses_per_centimeter_X;
+int32_t Pulses_per_centimeter_Y;
 
 
 //#define MAX_LAST_PULSE_NO 0xffffffff
-
 class Stepper_Driver{
 public:
   uint8_t Pulse_Pin;
@@ -122,7 +133,7 @@ public:
     Currently_Used = false;
   }
 
-  void Set_Speed(int16_t speed_micrometers, uint32_t time_at_check){
+  void Set_Speed(int16_t speed_micrometers, uint32_t time_at_check){    /// speed_micrometers - speed in micrometers per sec, time_at_check is current time in microseconds
     Last_Pulse_Time = time_at_check;
     if(Currently_Used == true) return;
     if (Current_Direction>0 && speed_micrometers<=0){
@@ -161,22 +172,22 @@ public:
        Current_Position_Pulses--;
     }
   }
-  void Reset_Position_To_0(){
+  void Reset_Position_To_0(){   /// Sets current position as 0
     Current_Position_Pulses = 0;
   }
-  void Set_Position_To_Micrometers(int32_t set_pos_to){
+  void Set_Position_To_Micrometers(int32_t set_pos_to){     /// Considers current position as the set_pos_to
     Current_Position_Pulses = (int32_t)(((int64_t)set_pos_to * Pulses_Per_Centimeter)/10000);
   }
-  int32_t Get_Current_Position_Micrometers(){
+  int32_t Get_Current_Position_Micrometers(){   /// Returns current position
     return (int32_t)((int64_t)Current_Position_Pulses*10000)/Pulses_Per_Centimeter;
   }
-  void Change_Pulses_Per_Centimeter_To(int32_t pulses){
+  void Change_Pulses_Per_Centimeter_To(int32_t pulses){     /// Changes axis scalling
       int32_t Old_Pulses_Per_Cm = Pulses_Per_Centimeter;
       Pulses_Per_Centimeter = pulses;
       int32_t Current_Position_Pulses = (int32_t)((int64_t)(pulses*Current_Position_Pulses)/Pulses_Per_Centimeter);
   }
 
-  void Refresh(uint32_t time_at_check){
+  void Refresh(uint32_t time_at_check){     /// time_at_check is the current time in microseconds
     if(Currently_Used == true) return;
     if (Current_Direction == 0) return;
     if (time_at_check>Last_Pulse_Time+Halfpulse_Time_micros){
@@ -194,7 +205,6 @@ public:
 
     }
 };
-
 class G1_Move{
 private:
   Stepper_Driver* Stepper1;
@@ -295,7 +305,7 @@ void Set_G1_Menu_Y(int32_t num){
 void Set_G1_Menu_F(int32_t num){
   G1_Menu_F = num;
 }
-
+/// This adds new G1 moves to the queue
 bool Add_Position_To_Buffer(int32_t X_Position, int32_t Y_Position,  int32_t Z_Position,  int32_t Feedrate){
     if (Moves_Buffer_Add_Counter + 1 == Moves_Buffer_Exe_Counter) return false;
     if ((Moves_Buffer_Add_Counter == (MAX_BUFFER_POSITION-1)) && Moves_Buffer_Exe_Counter == 0) return false;
