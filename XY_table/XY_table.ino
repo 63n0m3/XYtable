@@ -1,7 +1,8 @@
 // This software was coded as part of a video tutorial. Watch it for detailed explanation:
 // https://youtu.be/hlaf1pSfH0I Building a CNC controlled XY table. With deep software dive + source code. Arduino Mega TFT screen
-//by GenOme, https://github.com/63n0m3/XYtable/
-//btc: 1H8XwyQogdTFekH9w5CPonKFq9upmiqZ1P
+//Licence: MIT free use, distribute and profit with this copyright notice
+//By GenOme, https://github.com/63n0m3/XYtable/
+//Btc: 1H8XwyQogdTFekH9w5CPonKFq9upmiqZ1P
 /**
 * Overall structure looks this way that there is a Stepper_Driver class maintaining each separate stepper motor. It knows its position, pin connections to stepper driver etc.
 * Class G1_Move looks up into multiple Stepper_Driver classes and performs moves ensuring Stepper_Driver's are ready.
